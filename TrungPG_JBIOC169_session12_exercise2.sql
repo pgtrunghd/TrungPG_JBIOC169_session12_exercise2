@@ -11,29 +11,29 @@ CREATE TABLE sales (
     quantity INT
 );
 
-create or replace function check_stock()
-returns trigger as $$
-declare
-    v_stock int;
-begin
-    select stock into v_stock from products
-    where product_id =  new.product_id;
+CREATE OR REPLACE FUNCTION check_stock()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_stock INT;
+BEGIN
+    SELECT stock INTO v_stock FROM products
+    WHERE product_id = NEW.product_id;
 
-    if v_stock < new.quantity then
-        raise exception 'Not enough stock';
-    end if;
+    IF v_stock < NEW.quantity THEN
+        RAISE EXCEPTION 'Not enough stock';
+    END IF;
 
-    return new;
-end;
-$$ language plpgsql;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 
-create trigger trg_check_stock
-before insert on sales
-for each row
-execute function check_stock();
+CREATE TRIGGER trg_check_stock
+BEFORE INSERT ON sales
+FOR EACH ROW
+EXECUTE FUNCTION check_stock();
 
-INSERT INTO products (name, stock) VALUES 
+INSERT INTO products (name, stock) VALUES
 ('Điện thoại iPhone 15', 10),
 ('Tai nghe AirPods Pro', 5);
 
@@ -43,5 +43,5 @@ INSERT INTO sales (product_id, quantity) VALUES
 INSERT INTO sales (product_id, quantity) VALUES
 (2, 10);
 
-select * from products;
-select * from sales;
+SELECT * FROM products;
+SELECT * FROM sales;
