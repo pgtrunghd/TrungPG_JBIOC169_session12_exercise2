@@ -1,7 +1,3 @@
--- 1. Tạo bảng products
-drop table if exists products;
-drop table if exists sales;
-
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
     name VARCHAR(50),
